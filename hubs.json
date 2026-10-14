@@ -1,7 +1,7 @@
 {
   "registry_version": "1.0",
   "updated": "2026-10-14",
-  "profile_schema": "https://rest-of-us.github.io/job-circles/profiles/schema.json",
+  "profile_schema": "https://jsrothwell.github.io/job-circles/profiles/schema.json",
   "hubs": [
     {
       "id": "uk",
@@ -48,7 +48,7 @@
       "name": "Demo hub (sample data)",
       "region": "europe",
       "description": "Fictional sample profiles that show the profile format. Not real candidates.",
-      "repository": "https://github.com/rest-of-us/job-circles",
+      "repository": "https://github.com/jsrothwell/job-circles",
       "profiles_url": "profiles/demo.json",
       "timezones": [],
       "status": "demo"
