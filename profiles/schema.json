@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://the-rest-of-us.github.io/profiles/schema.json",
+  "title": "The Rest of US — Candidate Profile",
+  "description": "A candidate profile for senior tech talent outside the US. The schema deliberately has no fields for birth dates, graduation years, employment start/end dates or total years of experience, and it rejects unknown properties so those can't be added. Candidates are judged on what they built and the impact it had, not on when.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "headline",
+    "seniority",
+    "region",
+    "location",
+    "timezone",
+    "work_preferences",
+    "availability",
+    "core_competencies",
+    "major_impact",
+    "contact"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional pointer back to this schema, for editor autocompletion."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Version of this schema the profile conforms to."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 64,
+      "description": "URL-safe slug, unique within the hub. Should match the file name (profiles/<id>.json). Usually the candidate's GitHub handle.",
+      "examples": ["ada-okafor", "mkowalski"]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 80,
+      "description": "Name the candidate wants to be addressed by."
+    },
+    "pronouns": {
+      "type": "string",
+      "maxLength": 30,
+      "examples": ["she/her", "he/him", "they/them"]
+    },
+    "headline": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 140,
+      "description": "One line describing what the candidate does best.",
+      "examples": ["Distributed systems architect — payments and ledger platforms at national scale"]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 1200,
+      "description": "Short narrative. Plain text, no HTML. Avoid age indicators (e.g. 'with 25 years of experience')."
+    },
+    "seniority": {
+      "type": "string",
+      "enum": ["senior", "staff", "principal", "distinguished", "director", "vp", "cto"],
+      "description": "Level of scope the candidate operates at, independent of tenure."
+    },
+    "github": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$",
+      "description": "GitHub handle of the candidate. Hubs use it to confirm the profile PR was opened by the candidate."
+    },
+    "region": {
+      "type": "string",
+      "enum": ["uk", "europe", "canada", "latam", "apac", "africa", "middle-east"],
+      "description": "Regional hub the profile belongs to."
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country"],
+      "properties": {
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$",
+          "description": "ISO 3166-1 alpha-2 country code.",
+          "examples": ["GB", "CA", "BR", "IN"]
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "timezone": {
+      "type": "string",
+      "pattern": "^UTC(?:[+-](?:0?[0-9]|1[0-4])(?::(?:00|30|45))?)?$",
+      "description": "Home UTC offset, written as UTC, UTC+1, UTC-7, UTC+5:30 or UTC+5:45.",
+      "examples": ["UTC", "UTC-7", "UTC+5:30"]
+    },
+    "working_hours_overlap": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional: how far the candidate will shift their working day to overlap with a team.",
+      "properties": {
+        "earliest_start_utc": {
+          "type": "string",
+          "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "Earliest start time, in UTC (HH:MM)."
+        },
+        "latest_end_utc": {
+          "type": "string",
+          "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "Latest end time, in UTC (HH:MM)."
+        }
+      }
+    },
+    "work_preferences": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Engagement models the candidate accepts.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "contract_b2b",
+          "fulltime_eor",
+          "fulltime_local_entity",
+          "fractional",
+          "relocation"
+        ]
+      }
+    },
+    "availability": {
+      "type": "string",
+      "enum": ["immediately", "2_weeks", "1_month", "3_months", "open_to_conversations"],
+      "description": "How soon the candidate could start."
+    },
+    "languages": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Spoken languages and working proficiency.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["language", "proficiency"],
+        "properties": {
+          "language": { "type": "string", "maxLength": 40 },
+          "proficiency": { "type": "string", "enum": ["native", "fluent", "professional", "conversational"] }
+        }
+      }
+    },
+    "core_competencies": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "description": "Skill tags used for search and filtering. Lowercase, hyphenated (e.g. 'kubernetes', 'event-sourcing', 'platform-engineering').",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9.+#-]{0,39}$"
+      }
+    },
+    "major_impact": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "description": "Systems built and outcomes delivered. No dates: describe scope and results.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "summary"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 120,
+            "examples": ["Re-architected the settlement ledger for a national payments network"]
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "The candidate's role in this work.",
+            "examples": ["Lead architect", "Tech lead (team of 12)"]
+          },
+          "organization": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Optional. May be anonymised, e.g. 'Tier-1 European bank'."
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 600,
+            "description": "What the problem was and what the candidate did."
+          },
+          "architecture": {
+            "type": "array",
+            "maxItems": 12,
+            "uniqueItems": true,
+            "description": "Key technologies or architectural patterns involved.",
+            "items": { "type": "string", "maxLength": 40 }
+          },
+          "metrics": {
+            "type": "array",
+            "maxItems": 6,
+            "description": "Measurable outcomes.",
+            "items": { "type": "string", "maxLength": 140 },
+            "examples": [["p99 latency 1.2s → 180ms", "Cut infra spend 38%"]]
+          }
+        }
+      }
+    },
+    "proof_of_work": {
+      "type": "array",
+      "maxItems": 12,
+      "description": "Public evidence of the candidate's work.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "url", "type"],
+        "properties": {
+          "title": { "type": "string", "maxLength": 120 },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+          "type": {
+            "type": "string",
+            "enum": ["repository", "open_source_contribution", "publication", "talk", "design_doc", "product", "case_study", "other"]
+          },
+          "description": { "type": "string", "maxLength": 280 }
+        }
+      }
+    },
+    "vouches": {
+      "type": "array",
+      "maxItems": 20,
+      "description": "Peer vouches. Each vouch must be added in a pull request opened by the voucher's own GitHub account; hub maintainers check that the PR author matches vouched_by_github before merging.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["vouched_by", "vouched_by_github", "relationship", "date"],
+        "properties": {
+          "vouched_by": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Name of the person vouching."
+          },
+          "vouched_by_github": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$",
+            "description": "GitHub handle of the person vouching."
+          },
+          "relationship": {
+            "type": "string",
+            "enum": ["manager", "direct_report", "peer", "tech_lead", "client", "open_source_collaborator", "mentor"],
+            "description": "How the voucher worked with the candidate."
+          },
+          "statement": {
+            "type": "string",
+            "maxLength": 400,
+            "description": "What the voucher can personally attest to."
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date the vouch was given (YYYY-MM-DD)."
+          },
+          "verification_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://github\\.com/",
+            "description": "Link to the merged pull request in which the voucher added this vouch."
+          }
+        }
+      }
+    },
+    "compensation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "min", "period"],
+      "description": "Optional expected compensation range.",
+      "properties": {
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "examples": ["USD", "EUR", "GBP"] },
+        "min": { "type": "number", "minimum": 0 },
+        "max": { "type": "number", "minimum": 0 },
+        "period": { "type": "string", "enum": ["hour", "day", "month", "year"] }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "At least one way to reach the candidate. Everything here is public.",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "linkedin": { "type": "string", "format": "uri", "pattern": "^https://([a-z]{2,3}\\.)?linkedin\\.com/" },
+        "website": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "calendar": { "type": "string", "format": "uri", "pattern": "^https://", "description": "Booking link, e.g. Cal.com." }
+      }
+    },
+    "updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the profile was last reviewed by the candidate (YYYY-MM-DD)."
+    }
+  }
+}
