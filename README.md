@@ -39,15 +39,19 @@ This project takes a different approach:
 | [`index.html`](index.html) | The single-page search UI: Tailwind CSS, Fuse.js and vanilla JavaScript, all loaded from CDNs. |
 | [`hubs.json`](hubs.json) | Registry of regional hubs and their feed URLs. |
 | [`profiles/schema.json`](profiles/schema.json) | JSON Schema (draft 2020-12) that every candidate profile must pass. |
+| [`join.html`](join.html) | Profile builder: a form that checks entries as you type and opens a pre-filled GitHub pull request. |
 | [`profiles/demo.json`](profiles/demo.json) | Fictional sample profiles so the UI works before any hub goes live. They are labelled "Sample" in the UI. |
+| [`profiles/community/`](profiles/community) | Community hub for regions without a hub yet. [`validate-profiles.yml`](.github/workflows/validate-profiles.yml) checks PRs; [`build-community-feed.yml`](.github/workflows/build-community-feed.yml) rebuilds `profiles/community.json` on merge. |
 
 ---
 
 ## For candidates
 
-You publish your profile by opening a pull request against the hub for your region. You never need to touch this repository.
+**The easy way: use the [profile builder](https://jsrothwell.github.io/job-circles/join.html).** Fill in the form, which checks your entries as you type, and click **Submit on GitHub**. GitHub opens with your file already filled in, and you click **Propose changes** and then **Create pull request**. You only need a free GitHub account. If your region's hub isn't open yet, your profile goes to the community hub in this repository and moves to the regional hub once it launches.
 
-1. **Find your hub** in [`hubs.json`](hubs.json) or under [Hubs & feeds](https://jsrothwell.github.io/job-circles/#hubs) on the site. If your region has no hub yet, see [Launching a regional hub](#launching-a-regional-hub).
+**The manual way:**
+
+1. **Find your hub** in [`hubs.json`](hubs.json) or under [Hubs & feeds](https://jsrothwell.github.io/job-circles/#hubs) on the site. If your region has no hub yet, use [`profiles/community/`](profiles/community) in this repository.
 2. **Fork the hub repository** and create `profiles/<your-github-handle>.json`. Start from one of the entries in [`profiles/demo.json`](profiles/demo.json).
 3. **Write about impact.** Fill in `major_impact` with the systems you designed and what changed because of them: scale, latency, cost, reliability, team growth. Leave out dates; the schema rejects them.
 4. **Validate locally** (optional; CI does this too):
@@ -56,9 +60,9 @@ You publish your profile by opening a pull request against the hub for your regi
      -s https://jsrothwell.github.io/job-circles/profiles/schema.json \
      -d profiles/<your-github-handle>.json
    ```
-5. **Open a pull request** from your own GitHub account. Maintainers check that the PR author matches the `github` field in your profile, then merge it. Your profile shows up on the site the next time the hub's feed is rebuilt, usually within a few minutes.
+5. **Open a pull request** from your own GitHub account. Automated checks confirm that the PR author matches the `github` field in your profile, then a maintainer merges it. Your profile shows up on the site within a few minutes.
 
-To **update** your profile, open another PR. To **remove** it, open a PR that deletes the file, or ask a hub maintainer in an issue.
+To **update** your profile, use **Import your JSON file** in the profile builder, edit, and submit again, or open a PR by hand. To **remove** it, open a PR that deletes the file, or ask a hub maintainer in an issue.
 
 > **Privacy:** everything in your profile is public and can be copied by anyone. Only include contact details you're comfortable publishing. A LinkedIn URL or booking link is a good alternative to an email address.
 

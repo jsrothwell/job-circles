@@ -1,0 +1,51 @@
+name: Build community feed
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'profiles/community/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: community-feed
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Merge profiles into profiles/community.json
+        run: node scripts/build-community-feed.mjs
+
+      - name: Commit feed
+        id: commit
+        run: |
+          if git diff --quiet -- profiles/community.json; then
+            echo "Feed unchanged."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add profiles/community.json
+          git commit -m "Rebuild community profile feed"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Pushes made with GITHUB_TOKEN don't always trigger a Pages build, so request one.
+      - name: Rebuild GitHub Pages
+        if: steps.commit.outputs.changed == 'true'
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages build request failed; the next push will deploy it."
+        env:
+          GH_TOKEN: ${{ github.token }}

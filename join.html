@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add your profile — The Rest of US</title>
+  <meta name="description" content="Create your The Rest of US candidate profile in a few minutes and publish it through a GitHub pull request.">
+  <meta name="theme-color" content="#0b1020">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%234f46e5'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='white'/%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('trou-theme'); } catch (e) {}
+      if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style type="text/tailwindcss">
+    .card { @apply rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-6; }
+    .label { @apply block text-sm font-medium; }
+    .hint { @apply mt-1 text-xs text-slate-500 dark:text-slate-400; }
+    .field { @apply mt-1.5 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-800; }
+    .show-errors .field[aria-invalid="true"], .show-errors .group-invalid { @apply border-rose-500 ring-2 ring-rose-500/20; }
+    .req::after { content: " *"; @apply text-rose-500; }
+    .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800; }
+    .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-semibold text-white shadow-sm hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950; }
+    .section-title { @apply text-lg font-semibold; }
+    .row { @apply relative rounded-xl border border-slate-200 p-4 dark:border-slate-700; }
+  </style>
+  <style>
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+
+  <header class="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <a href="./" class="flex items-center gap-2 font-bold tracking-tight">
+        <svg class="h-7 w-7" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#4f46e5"/><circle cx="32" cy="32" r="18" fill="none" stroke="white" stroke-width="5"/><circle cx="32" cy="32" r="6" fill="white"/></svg>
+        <span>The Rest of <span class="text-brand-600 dark:text-brand-400">US</span></span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="./#talent" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Find talent</a>
+        <button id="themeToggle" type="button" class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 dark:text-slate-300 dark:hover:bg-slate-800" aria-label="Toggle dark mode">
+          <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="hidden h-5 w-5 dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+    <div class="max-w-3xl">
+      <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Add your profile</h1>
+      <p class="mt-3 text-slate-600 dark:text-slate-300">
+        Fill in the form and we'll build your profile file as you type. When it's ready, one click opens GitHub with the file already filled in, and you propose it there.
+        There are no dates or "years of experience" fields here. You're judged on what you built, not when.
+      </p>
+      <ol class="mt-6 grid gap-3 text-sm sm:grid-cols-3">
+        <li class="flex gap-3 rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900"><span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">1</span><span>Fill in the form. Your draft saves in this browser automatically.</span></li>
+        <li class="flex gap-3 rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900"><span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">2</span><span>Click <strong>Submit on GitHub</strong>. You'll need a free GitHub account.</span></li>
+        <li class="flex gap-3 rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900"><span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">3</span><span>On GitHub, click <strong>Propose changes</strong>, then <strong>Create pull request</strong>. You're live once it's merged.</span></li>
+      </ol>
+      <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-slate-600 dark:text-slate-400">Updating an existing profile?</span>
+        <label class="btn cursor-pointer">
+          <input id="importFile" type="file" accept="application/json,.json" class="sr-only">
+          Import your JSON file
+        </label>
+        <button id="clearDraft" type="button" class="btn">Start over</button>
+      </div>
+    </div>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-[1fr_24rem]">
+      <form id="profileForm" class="space-y-6" novalidate>
+
+        <!-- About -->
+        <section class="card" aria-labelledby="s-about">
+          <h2 id="s-about" class="section-title">About you</h2>
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="name" class="label req">Name</label>
+              <input id="name" class="field" autocomplete="name" maxlength="80" placeholder="What people call you">
+            </div>
+            <div>
+              <label for="pronouns" class="label">Pronouns</label>
+              <input id="pronouns" class="field" maxlength="30" placeholder="e.g. she/her, they/them">
+            </div>
+            <div>
+              <label for="github" class="label req">GitHub username</label>
+              <input id="github" class="field" autocomplete="username" maxlength="39" placeholder="octocat" spellcheck="false" autocapitalize="off">
+              <p class="hint">Used as your profile ID. The pull request must come from this account.</p>
+            </div>
+            <div>
+              <label for="seniority" class="label req">Level of scope</label>
+              <select id="seniority" class="field">
+                <option value="">Choose…</option>
+              </select>
+              <p class="hint">The scope you operate at, not your tenure.</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="headline" class="label req">Headline</label>
+              <input id="headline" class="field" maxlength="140" placeholder="Distributed systems architect — payments and ledger platforms at national scale">
+              <p class="hint"><span data-count="headline">0</span>/140 · one line on what you do best.</p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="summary" class="label">Summary</label>
+              <textarea id="summary" class="field" rows="4" maxlength="1200" placeholder="A few sentences on the problems you like solving."></textarea>
+              <p class="hint"><span data-count="summary">0</span>/1200 · plain text.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Location -->
+        <section class="card" aria-labelledby="s-loc">
+          <h2 id="s-loc" class="section-title">Location &amp; availability</h2>
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="country" class="label req">Country</label>
+              <select id="country" class="field"><option value="">Choose…</option></select>
+            </div>
+            <div>
+              <label for="city" class="label">City</label>
+              <input id="city" class="field" maxlength="80" autocomplete="address-level2">
+            </div>
+            <div>
+              <label for="region" class="label req">Regional hub</label>
+              <select id="region" class="field"><option value="">Choose…</option></select>
+              <p class="hint">Set automatically from your country. Change it if another hub fits better.</p>
+            </div>
+            <div>
+              <label for="timezone" class="label req">Timezone</label>
+              <select id="timezone" class="field"></select>
+            </div>
+            <div>
+              <label for="startUtc" class="label">Earliest start <span class="font-normal text-slate-500">(UTC)</span></label>
+              <input id="startUtc" type="time" class="field">
+            </div>
+            <div>
+              <label for="endUtc" class="label">Latest finish <span class="font-normal text-slate-500">(UTC)</span></label>
+              <input id="endUtc" type="time" class="field">
+              <p class="hint" id="hoursHint">Optional: how far you'll shift your day to overlap with a team.</p>
+            </div>
+            <fieldset class="sm:col-span-2">
+              <legend class="label req">Work arrangements you accept</legend>
+              <div id="prefs" class="mt-2 grid gap-2 rounded-lg sm:grid-cols-2"></div>
+            </fieldset>
+            <div>
+              <label for="availability" class="label req">Availability</label>
+              <select id="availability" class="field"><option value="">Choose…</option></select>
+            </div>
+          </div>
+          <div class="mt-5">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium">Languages</h3>
+              <button type="button" class="btn" data-add="language">+ Add language</button>
+            </div>
+            <div id="languages" class="mt-2 space-y-2"></div>
+          </div>
+        </section>
+
+        <!-- Skills -->
+        <section class="card" aria-labelledby="s-skills">
+          <h2 id="s-skills" class="section-title req">Core competencies</h2>
+          <p class="hint">3–20 skills. Press Enter or comma after each. These power search and the skill filters.</p>
+          <div id="skillsBox" class="field mt-3 flex min-h-[2.75rem] flex-wrap items-center gap-1.5">
+            <div id="skillChips" class="contents"></div>
+            <input id="skillInput" class="min-w-[8rem] flex-1 border-0 bg-transparent p-1 text-sm focus:outline-none focus:ring-0" placeholder="e.g. kubernetes, event-sourcing, go" aria-label="Add a skill" autocapitalize="off" spellcheck="false">
+          </div>
+          <p class="hint">Saved in lowercase with hyphens, e.g. “Event Sourcing” becomes <code>event-sourcing</code>.</p>
+        </section>
+
+        <!-- Impact -->
+        <section class="card" aria-labelledby="s-impact">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 id="s-impact" class="section-title req">Systems &amp; impact</h2>
+              <p class="hint">1–8 things you built or led, and what changed because of them. No dates.</p>
+            </div>
+            <button type="button" class="btn shrink-0" data-add="impact">+ Add</button>
+          </div>
+          <div id="impacts" class="mt-4 space-y-4"></div>
+        </section>
+
+        <!-- Proof of work -->
+        <section class="card" aria-labelledby="s-pow">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 id="s-pow" class="section-title">Proof of work</h2>
+              <p class="hint">Public links: repos, talks, papers, write-ups, products.</p>
+            </div>
+            <button type="button" class="btn shrink-0" data-add="pow">+ Add</button>
+          </div>
+          <div id="pows" class="mt-4 space-y-3"></div>
+        </section>
+
+        <!-- Contact -->
+        <section class="card" aria-labelledby="s-contact">
+          <h2 id="s-contact" class="section-title">How recruiters reach you</h2>
+          <p class="hint">At least one is required. <strong>Everything here is public</strong>, so a booking link or LinkedIn is a good alternative to email.</p>
+          <div id="contactGroup" class="mt-4 grid gap-4 rounded-lg sm:grid-cols-2">
+            <div>
+              <label for="email" class="label">Email</label>
+              <input id="email" type="email" class="field" autocomplete="email" placeholder="you@example.com">
+            </div>
+            <div>
+              <label for="linkedin" class="label">LinkedIn URL</label>
+              <input id="linkedin" type="url" class="field" placeholder="https://www.linkedin.com/in/…">
+            </div>
+            <div>
+              <label for="website" class="label">Website</label>
+              <input id="website" type="url" class="field" placeholder="https://…">
+            </div>
+            <div>
+              <label for="calendar" class="label">Booking link</label>
+              <input id="calendar" type="url" class="field" placeholder="https://cal.com/…">
+            </div>
+          </div>
+          <details class="mt-5">
+            <summary class="cursor-pointer text-sm font-medium">Expected compensation (optional)</summary>
+            <div class="mt-3 grid gap-3 sm:grid-cols-4">
+              <div>
+                <label for="compCurrency" class="label">Currency</label>
+                <input id="compCurrency" class="field uppercase" maxlength="3" placeholder="USD">
+              </div>
+              <div>
+                <label for="compMin" class="label">From</label>
+                <input id="compMin" type="number" min="0" class="field">
+              </div>
+              <div>
+                <label for="compMax" class="label">To</label>
+                <input id="compMax" type="number" min="0" class="field">
+              </div>
+              <div>
+                <label for="compPeriod" class="label">Per</label>
+                <select id="compPeriod" class="field">
+                  <option value="year">year</option><option value="month">month</option><option value="day">day</option><option value="hour">hour</option>
+                </select>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title">Peer vouches</h2>
+          <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            You can't add vouches yourself. Once your profile is live, send its link to a former manager, peer or client and ask them to add a vouch through their own GitHub account.
+          </p>
+          <p id="vouchKeep" class="mt-2 hidden text-sm font-medium text-emerald-700 dark:text-emerald-400"></p>
+        </section>
+      </form>
+
+      <!-- Sidebar -->
+      <aside class="lg:sticky lg:top-20 lg:self-start">
+        <div class="card space-y-4">
+          <div>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Submitting to</p>
+            <p id="destName" class="font-semibold">—</p>
+            <p id="destNote" class="text-xs text-slate-500 dark:text-slate-400"></p>
+          </div>
+          <div>
+            <div class="flex items-center justify-between text-sm">
+              <span id="progressLabel" class="font-medium">Getting started</span>
+              <span id="progressPct" class="text-slate-500">0%</span>
+            </div>
+            <div class="mt-2 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+              <div id="progressBar" class="h-full rounded-full bg-brand-600 transition-all" style="width:0%"></div>
+            </div>
+          </div>
+          <ul id="issues" class="max-h-56 space-y-1 overflow-auto text-sm" aria-live="polite"></ul>
+          <button id="submitBtn" type="button" class="btn-primary w-full">
+            <svg class="h-5 w-5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            Submit on GitHub
+          </button>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="copyBtn" type="button" class="btn">Copy JSON</button>
+            <button id="downloadBtn" type="button" class="btn">Download</button>
+          </div>
+          <div id="nextSteps" class="hidden rounded-xl bg-brand-50 p-4 text-sm text-slate-800 dark:bg-brand-500/10 dark:text-slate-200"></div>
+        </div>
+        <details class="card mt-4">
+          <summary class="cursor-pointer text-sm font-medium">Preview your profile file</summary>
+          <pre id="jsonPreview" class="mt-3 max-h-[28rem] overflow-auto rounded-lg bg-slate-100 p-3 text-xs leading-relaxed dark:bg-slate-950"></pre>
+        </details>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-7xl px-4 py-8 text-sm text-slate-500 dark:text-slate-400 sm:px-6">
+      Your draft stays in this browser until you submit it. Profiles are public and checked against <a class="underline-offset-2 hover:underline" href="profiles/schema.json">the profile schema</a>.
+    </div>
+  </footer>
+
+  <div id="toast" role="status" class="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-slate-900 px-4 py-2 text-sm text-white opacity-0 shadow-lg transition-opacity dark:bg-white dark:text-slate-900"></div>
+
+<script>
+'use strict';
+
+/* ------------------------------------------------------------------ *
+ * Reference data (mirrors profiles/schema.json)
+ * ------------------------------------------------------------------ */
+const DRAFT_KEY = 'trou-draft';
+const MAX_PREFILL_URL = 7500;   // GitHub rejects very long URLs; past this we use the clipboard.
+
+const SENIORITY = { senior: 'Senior', staff: 'Staff', principal: 'Principal', distinguished: 'Distinguished', director: 'Director', vp: 'VP', cto: 'CTO' };
+const REGIONS = { uk: 'UK & Ireland', europe: 'Europe', canada: 'Canada', latam: 'Latin America', apac: 'Asia-Pacific', africa: 'Africa', 'middle-east': 'Middle East' };
+const PREFS = {
+  contract_b2b: ['Contract (B2B)', 'You invoice through your own company.'],
+  fulltime_eor: ['Full-time via EOR', 'Employed through an Employer of Record.'],
+  fulltime_local_entity: ['Full-time (local entity)', 'The company has an entity in your country.'],
+  fractional: ['Fractional', 'Part-time or advisory.'],
+  relocation: ['Open to relocation', '']
+};
+const AVAILABILITY = { immediately: 'Available now', '2_weeks': 'In 2 weeks', '1_month': 'In 1 month', '3_months': 'In 3 months', open_to_conversations: 'Open to conversations' };
+const POW_TYPES = { repository: 'Repository', open_source_contribution: 'Open-source contribution', publication: 'Publication', talk: 'Talk', design_doc: 'Design doc', product: 'Product', case_study: 'Case study', other: 'Other' };
+const PROFICIENCY = { native: 'Native', fluent: 'Fluent', professional: 'Professional', conversational: 'Conversational' };
+const TZ_OFFSETS = [-12, -11, -10, -9.5, -9, -8, -7, -6, -5, -4, -3.5, -3, -2, -1, 0, 1, 2, 3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6, 6.5, 7, 8, 8.75, 9, 9.5, 10, 10.5, 11, 12, 12.75, 13, 13.75, 14];
+
+// ISO 3166-1 alpha-2, excluding the US and its territories.
+const COUNTRIES = 'AD AE AF AG AI AL AM AO AR AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GT GW GY HK HN HR HT HU ID IE IL IM IN IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UY UZ VA VC VE VG VN VU WF WS XK YE YT ZA ZM ZW'.split(' ');
+const COUNTRY_REGION = {
+  uk: 'GB IE IM JE GG',
+  canada: 'CA',
+  latam: 'AR BO BR CL CO CR CU DO EC SV GT HN MX NI PA PY PE UY VE BZ GY SR JM TT HT BS BB AG DM GD KN LC VC AI AW BQ CW SX KY TC VG MS BL MF GP MQ GF FK BM',
+  apac: 'AU NZ IN PK BD LK NP BT MV CN HK MO TW JP KR KP MN SG MY ID TH VN PH KH LA MM BN TL PG FJ SB VU NC PF WS TO KI TV NR FM MH PW CK NU TK WF CC CX NF PN AF KZ KG TJ TM UZ',
+  'middle-east': 'AE SA QA KW BH OM YE IQ IR IL PS JO LB SY',
+  africa: 'DZ AO BJ BW BF BI CV CM CF TD KM CD CG CI DJ EG GQ ER SZ ET GA GM GH GN GW KE LS LR LY MG MW ML MR MU YT MA MZ NA NE NG RE RW SH ST SN SC SL SO ZA SS SD TZ TG TN UG EH ZM ZW'
+};
+
+const RE = {
+  github: /^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/,
+  skill: /^[a-z0-9][a-z0-9.+#-]{0,39}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  https: /^https:\/\/[^\s]+\.[^\s]+/,
+  linkedin: /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\//,
+  currency: /^[A-Z]{3}$/,
+  // Age proxies we nudge people away from.
+  year: /\b(19[5-9]\d|20[0-3]\d)\b/,
+  tenure: /\b\d{1,2}\s*\+?\s*(years?|yrs?)\b/i
+};
+
+/* ------------------------------------------------------------------ *
+ * State
+ * ------------------------------------------------------------------ */
+const state = {
+  skills: [],
+  keptVouches: [],        // vouches carried over from an imported profile
+  regionTouched: false,
+  showErrors: false,
+  hubs: [],
+  hubAvailable: {}        // hubId -> true | false
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+const val = (id) => ($('#' + id)?.value || '').trim();
+
+function esc(v) {
+  return String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function tzValue(n) {
+  if (n === 0) return 'UTC';
+  const abs = Math.abs(n), h = Math.floor(abs), m = Math.round((abs - h) * 60);
+  return `UTC${n < 0 ? '-' : '+'}${h}${m ? ':' + String(m).padStart(2, '0') : ''}`;
+}
+
+function toast(msg) {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.style.opacity = '0'; }, 2600);
+}
+
+function normaliseSkill(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.+#-]/g, '').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+}
+
+let regionNames = null;
+try { regionNames = new Intl.DisplayNames(['en'], { type: 'region' }); } catch {}
+const countryName = (c) => { try { return regionNames ? regionNames.of(c) : c; } catch { return c; } };
+
+/* ------------------------------------------------------------------ *
+ * Static UI
+ * ------------------------------------------------------------------ */
+function buildSelects() {
+  const opts = (obj) => Object.entries(obj).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join('');
+  $('#seniority').insertAdjacentHTML('beforeend', opts(SENIORITY));
+  $('#region').insertAdjacentHTML('beforeend', opts(REGIONS));
+  $('#availability').insertAdjacentHTML('beforeend', opts(AVAILABILITY));
+  $('#country').insertAdjacentHTML('beforeend', COUNTRIES
+    .map((c) => [c, countryName(c)]).sort((a, b) => a[1].localeCompare(b[1]))
+    .map(([c, n]) => `<option value="${c}">${esc(n)}</option>`).join(''));
+
+  const local = -new Date().getTimezoneOffset() / 60;
+  $('#timezone').innerHTML = '<option value="">Choose…</option>' + TZ_OFFSETS.map((n) =>
+    `<option value="${tzValue(n)}">${tzValue(n).replace('-', '−')}${n === local ? ' (this device)' : ''}</option>`).join('');
+  if (TZ_OFFSETS.includes(local)) $('#timezone').value = tzValue(local);
+
+  $('#prefs').innerHTML = Object.entries(PREFS).map(([k, [label, hint]]) => `
+    <label class="flex cursor-pointer gap-3 rounded-lg border border-slate-200 p-3 text-sm hover:border-brand-500 dark:border-slate-700">
+      <input type="checkbox" value="${k}" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+      <span><span class="font-medium">${esc(label)}</span>${hint ? `<span class="block text-xs text-slate-500 dark:text-slate-400">${esc(hint)}</span>` : ''}</span>
+    </label>`).join('');
+}
+
+const removeBtn = '<button type="button" data-remove class="absolute right-2 top-2 rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rose-600 dark:hover:bg-slate-800" aria-label="Remove"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg></button>';
+
+function addImpact(d = {}) {
+  if ($$('#impacts .row').length >= 8) return toast('You can add up to 8 impact entries');
+  const n = $$('#impacts .row').length + 1;
+  $('#impacts').insertAdjacentHTML('beforeend', `
+    <div class="row grid gap-3 sm:grid-cols-2">
+      ${removeBtn}
+      <div class="sm:col-span-2 pr-8">
+        <label class="label req">What did you build or change?</label>
+        <input data-k="title" class="field" maxlength="120" placeholder="Rebuilt the settlement ledger for a national payments scheme" value="${esc(d.title)}">
+      </div>
+      <div>
+        <label class="label">Your role</label>
+        <input data-k="role" class="field" maxlength="80" placeholder="Lead architect" value="${esc(d.role)}">
+      </div>
+      <div>
+        <label class="label">Organization</label>
+        <input data-k="organization" class="field" maxlength="80" placeholder="Can be anonymised, e.g. “Tier-1 European bank”" value="${esc(d.organization)}">
+      </div>
+      <div class="sm:col-span-2">
+        <label class="label req">What was the problem, and what did you do?</label>
+        <textarea data-k="summary" class="field" rows="3" maxlength="600">${esc(d.summary)}</textarea>
+      </div>
+      <div>
+        <label class="label">Results</label>
+        <textarea data-k="metrics" class="field" rows="3" placeholder="One per line, e.g.&#10;p99 latency 1.2s → 180ms&#10;Cloud spend down 31%">${esc((d.metrics || []).join('\n'))}</textarea>
+      </div>
+      <div>
+        <label class="label">Technologies &amp; patterns</label>
+        <textarea data-k="architecture" class="field" rows="3" placeholder="Comma-separated, e.g. kafka, event-sourcing, go">${esc((d.architecture || []).join(', '))}</textarea>
+      </div>
+    </div>`);
+  if (!d.title && n > 1) $$('#impacts .row').at(-1).querySelector('input').focus();
+}
+
+function addPow(d = {}) {
+  if ($$('#pows .row').length >= 12) return toast('You can add up to 12 links');
+  $('#pows').insertAdjacentHTML('beforeend', `
+    <div class="row grid gap-3 sm:grid-cols-[1fr_12rem]">
+      ${removeBtn}
+      <div class="pr-8 sm:pr-0">
+        <label class="label req">Title</label>
+        <input data-k="title" class="field" maxlength="120" value="${esc(d.title)}">
+      </div>
+      <div class="sm:pr-8">
+        <label class="label">Type</label>
+        <select data-k="type" class="field">${Object.entries(POW_TYPES).map(([k, v]) => `<option value="${k}"${d.type === k ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select>
+      </div>
+      <div>
+        <label class="label req">Link</label>
+        <input data-k="url" type="url" class="field" placeholder="https://…" value="${esc(d.url)}">
+      </div>
+      <div>
+        <label class="label">Note</label>
+        <input data-k="description" class="field" maxlength="280" value="${esc(d.description)}">
+      </div>
+    </div>`);
+}
+
+function addLanguage(d = {}) {
+  $('#languages').insertAdjacentHTML('beforeend', `
+    <div class="row flex flex-wrap items-end gap-3 py-3">
+      <div class="min-w-[10rem] flex-1">
+        <label class="sr-only">Language</label>
+        <input data-k="language" class="field mt-0" maxlength="40" placeholder="Language" value="${esc(d.language)}">
+      </div>
+      <div class="w-44">
+        <label class="sr-only">Proficiency</label>
+        <select data-k="proficiency" class="field mt-0">${Object.entries(PROFICIENCY).map(([k, v]) => `<option value="${k}"${(d.proficiency || 'professional') === k ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select>
+      </div>
+      <button type="button" data-remove class="rounded-md p-2 text-slate-400 hover:bg-slate-100 hover:text-rose-600 dark:hover:bg-slate-800" aria-label="Remove language"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>`);
+}
+
+function renderSkills() {
+  $('#skillChips').innerHTML = state.skills.map((s) => `
+    <span class="inline-flex items-center gap-1 rounded-md bg-brand-50 py-0.5 pl-2 pr-1 text-xs font-medium text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">
+      ${esc(s)}<button type="button" data-skill="${esc(s)}" class="rounded px-1 hover:bg-brand-100 dark:hover:bg-brand-500/20" aria-label="Remove ${esc(s)}">×</button>
+    </span>`).join('');
+}
+
+function addSkills(text) {
+  for (const raw of text.split(',')) {
+    const s = normaliseSkill(raw);
+    if (!s) continue;
+    if (state.skills.includes(s)) continue;
+    if (state.skills.length >= 20) { toast('Up to 20 skills'); break; }
+    state.skills.push(s);
+  }
+  renderSkills();
+}
+
+/* ------------------------------------------------------------------ *
+ * Form ⇄ profile
+ * ------------------------------------------------------------------ */
+function rows(container, keys) {
+  return $$(container + ' .row').map((row) => {
+    const o = {};
+    for (const k of keys) o[k] = (row.querySelector(`[data-k="${k}"]`)?.value || '').trim();
+    return o;
+  });
+}
+
+const splitList = (s, sep) => s.split(sep).map((x) => x.trim()).filter(Boolean);
+
+function collect() {
+  const p = { schema_version: '1.0' };
+  const gh = val('github');
+  p.id = gh.toLowerCase();
+  p.name = val('name');
+  if (val('pronouns')) p.pronouns = val('pronouns');
+  p.headline = val('headline');
+  if (val('summary')) p.summary = val('summary');
+  p.seniority = val('seniority');
+  if (gh) p.github = gh;
+  p.region = val('region');
+  p.location = { country: val('country') };
+  if (val('city')) p.location.city = val('city');
+  p.timezone = val('timezone');
+  if (val('startUtc') || val('endUtc')) {
+    p.working_hours_overlap = {};
+    if (val('startUtc')) p.working_hours_overlap.earliest_start_utc = val('startUtc');
+    if (val('endUtc')) p.working_hours_overlap.latest_end_utc = val('endUtc');
+  }
+  p.work_preferences = $$('#prefs input:checked').map((i) => i.value);
+  p.availability = val('availability');
+
+  const langs = rows('#languages', ['language', 'proficiency']).filter((l) => l.language);
+  if (langs.length) p.languages = langs;
+
+  p.core_competencies = [...state.skills];
+
+  p.major_impact = rows('#impacts', ['title', 'role', 'organization', 'summary', 'metrics', 'architecture']).map((r) => {
+    const m = { title: r.title };
+    if (r.role) m.role = r.role;
+    if (r.organization) m.organization = r.organization;
+    m.summary = r.summary;
+    const arch = [...new Set(splitList(r.architecture, /[,\n]/))];
+    if (arch.length) m.architecture = arch;
+    const metrics = splitList(r.metrics, '\n');
+    if (metrics.length) m.metrics = metrics;
+    return m;
+  });
+
+  const pows = rows('#pows', ['title', 'url', 'type', 'description'])
+    .filter((w) => w.title || w.url)
+    .map((w) => {
+      const o = { title: w.title, url: w.url, type: w.type };
+      if (w.description) o.description = w.description;
+      return o;
+    });
+  if (pows.length) p.proof_of_work = pows;
+
+  if (state.keptVouches.length) p.vouches = state.keptVouches;
+
+  const comp = { currency: val('compCurrency').toUpperCase(), min: val('compMin'), max: val('compMax'), period: val('compPeriod') };
+  if (comp.min || comp.max) {
+    p.compensation = { currency: comp.currency, min: Number(comp.min), period: comp.period };
+    if (comp.max) p.compensation.max = Number(comp.max);
+  }
+
+  p.contact = {};
+  for (const k of ['email', 'linkedin', 'website', 'calendar']) if (val(k)) p.contact[k] = val(k);
+
+  p.updated = new Date().toISOString().slice(0, 10);
+  return p;
+}
+
+function fill(p) {
+  const set = (id, v) => { const el = $('#' + id); if (el) el.value = v ?? ''; };
+  set('name', p.name); set('pronouns', p.pronouns); set('github', p.github || p.id);
+  set('headline', p.headline); set('summary', p.summary); set('seniority', p.seniority);
+  set('country', p.location?.country); set('city', p.location?.city);
+  set('region', p.region); state.regionTouched = !!p.region;
+  if (p.timezone) set('timezone', p.timezone);
+  set('startUtc', p.working_hours_overlap?.earliest_start_utc); set('endUtc', p.working_hours_overlap?.latest_end_utc);
+  $$('#prefs input').forEach((i) => { i.checked = (p.work_preferences || []).includes(i.value); });
+  set('availability', p.availability);
+  for (const k of ['email', 'linkedin', 'website', 'calendar']) set(k, p.contact?.[k]);
+  set('compCurrency', p.compensation?.currency); set('compMin', p.compensation?.min); set('compMax', p.compensation?.max);
+  if (p.compensation?.period) set('compPeriod', p.compensation.period);
+
+  state.skills = Array.isArray(p.core_competencies) ? p.core_competencies.map(normaliseSkill).filter(Boolean).slice(0, 20) : [];
+  renderSkills();
+  state.keptVouches = Array.isArray(p.vouches) ? p.vouches : [];
+
+  $('#languages').innerHTML = ''; (p.languages || []).forEach(addLanguage);
+  $('#impacts').innerHTML = ''; (p.major_impact?.length ? p.major_impact : [{}]).forEach((m) => addImpact(m));
+  $('#pows').innerHTML = ''; (p.proof_of_work || []).forEach(addPow);
+}
+
+/* ------------------------------------------------------------------ *
+ * Validation (mirrors profiles/schema.json; CI runs the real schema)
+ * ------------------------------------------------------------------ */
+function validate(p) {
+  const errors = [];   // { el, msg }
+  const warnings = [];
+  const err = (el, msg) => errors.push({ el, msg });
+
+  if (p.name.length < 2) err('#name', 'Add your name');
+  if (!p.github) err('#github', 'Add your GitHub username');
+  else if (!RE.github.test(p.github) || p.id.length < 3) err('#github', 'GitHub username doesn’t look valid');
+  if (!p.seniority) err('#seniority', 'Choose your level of scope');
+  if (p.headline.length < 10) err('#headline', 'Write a headline (at least 10 characters)');
+  if (!p.location.country) err('#country', 'Choose your country');
+  if (!p.region) err('#region', 'Choose a regional hub');
+  if (!p.timezone) err('#timezone', 'Choose your timezone');
+  if (!p.work_preferences.length) err('#prefs', 'Pick at least one work arrangement');
+  if (!p.availability) err('#availability', 'Choose your availability');
+  if (p.core_competencies.length < 3) err('#skillsBox', `Add ${3 - p.core_competencies.length} more skill${p.core_competencies.length === 2 ? '' : 's'}`);
+  for (const s of p.core_competencies) if (!RE.skill.test(s)) err('#skillsBox', `Skill “${s}” has unsupported characters`);
+
+  const impactRows = $$('#impacts .row');
+  if (!p.major_impact.length) err('#impacts', 'Add at least one impact entry');
+  p.major_impact.forEach((m, i) => {
+    const row = impactRows[i];
+    if (!m.title) err(row.querySelector('[data-k="title"]'), `Impact ${i + 1}: add a title`);
+    if (!m.summary) err(row.querySelector('[data-k="summary"]'), `Impact ${i + 1}: describe what you did`);
+    if ((m.architecture || []).length > 12) err(row.querySelector('[data-k="architecture"]'), `Impact ${i + 1}: up to 12 technologies`);
+    if ((m.metrics || []).length > 6) err(row.querySelector('[data-k="metrics"]'), `Impact ${i + 1}: up to 6 results`);
+    if ((m.architecture || []).some((a) => a.length > 40)) err(row.querySelector('[data-k="architecture"]'), `Impact ${i + 1}: keep each technology under 40 characters`);
+    if ((m.metrics || []).some((a) => a.length > 140)) err(row.querySelector('[data-k="metrics"]'), `Impact ${i + 1}: keep each result under 140 characters`);
+  });
+
+  const powRows = $$('#pows .row').filter((r) => r.querySelector('[data-k="title"]').value.trim() || r.querySelector('[data-k="url"]').value.trim());
+  (p.proof_of_work || []).forEach((w, i) => {
+    if (!w.title) err(powRows[i].querySelector('[data-k="title"]'), `Link ${i + 1}: add a title`);
+    if (!RE.https.test(w.url)) err(powRows[i].querySelector('[data-k="url"]'), `Link ${i + 1}: use a full https:// URL`);
+  });
+
+  const c = p.contact;
+  if (!Object.keys(c).length) err('#contactGroup', 'Add at least one way to contact you');
+  if (c.email && !RE.email.test(c.email)) err('#email', 'Email address doesn’t look valid');
+  if (c.linkedin && !RE.linkedin.test(c.linkedin)) err('#linkedin', 'LinkedIn URL should start with https://www.linkedin.com/');
+  if (c.website && !RE.https.test(c.website)) err('#website', 'Website should be a full https:// URL');
+  if (c.calendar && !RE.https.test(c.calendar)) err('#calendar', 'Booking link should be a full https:// URL');
+
+  if (p.compensation) {
+    const comp = p.compensation;
+    if (!RE.currency.test(comp.currency)) err('#compCurrency', 'Compensation: use a 3-letter currency code, e.g. EUR');
+    if (!Number.isFinite(comp.min) || comp.min < 0) err('#compMin', 'Compensation: add a starting amount');
+    if (comp.max !== undefined && comp.max < comp.min) err('#compMax', 'Compensation: “to” must be at least “from”');
+  }
+
+  // Age-proxy nudges: allowed, but against the spirit of the project.
+  const texts = [['#headline', p.headline], ['#summary', p.summary || '']];
+  p.major_impact.forEach((m, i) => texts.push([impactRows[i].querySelector('[data-k="summary"]'), `${m.title} ${m.summary} ${(m.metrics || []).join(' ')}`]));
+  for (const [el, t] of texts) {
+    if (RE.tenure.test(t)) { warnings.push({ el, msg: 'Mentions years of experience. Consider describing scope instead.' }); break; }
+  }
+  for (const [el, t] of texts) {
+    if (RE.year.test(t)) { warnings.push({ el, msg: 'Mentions a year. Dates can work as age proxies, so consider removing them.' }); break; }
+  }
+  return { errors, warnings };
+}
+
+const REQUIRED_STEPS = 13;  // rough count of required items, for the progress bar
+
+/* ------------------------------------------------------------------ *
+ * Hubs & destination
+ * ------------------------------------------------------------------ */
+async function loadHubs() {
+  try {
+    const res = await fetch('hubs.json', { cache: 'no-cache' });
+    const reg = await res.json();
+    state.hubs = (reg.hubs || []).filter((h) => h.submit && h.status !== 'disabled' && h.status !== 'demo');
+  } catch { state.hubs = []; }
+
+  await Promise.all(state.hubs.map(async (h) => {
+    if (h.always_open) { state.hubAvailable[h.id] = true; return; }
+    try {
+      const r = await fetch(`https://api.github.com/repos/${h.submit.repository}`, { headers: { Accept: 'application/vnd.github+json' } });
+      state.hubAvailable[h.id] = r.ok;
+    } catch { state.hubAvailable[h.id] = false; }
+  }));
+  update();
+}
+
+function destination(region) {
+  const open = state.hubs.filter((h) => state.hubAvailable[h.id]);
+  const regional = open.find((h) => h.region === region && !h.always_open);
+  const fallback = open.find((h) => h.always_open);
+  return { hub: regional || fallback || null, isFallback: !regional && !!fallback };
+}
+
+function renderDestination(p) {
+  if (!state.hubs.length) { $('#destName').textContent = 'Loading hubs…'; $('#destNote').textContent = ''; return; }
+  const { hub, isFallback } = destination(p.region);
+  if (!hub) { $('#destName').textContent = 'No hub available'; $('#destNote').textContent = 'Download your file and try again later.'; return; }
+  $('#destName').textContent = hub.name;
+  $('#destNote').textContent = isFallback && p.region
+    ? `The ${REGIONS[p.region]} hub isn't open yet, so your profile goes to the community hub. It moves to the regional hub once that opens.`
+    : `github.com/${hub.submit.repository}`;
+}
+
+async function profileExists(hub, id) {
+  try {
+    const res = await fetch(new URL(hub.profiles_url, location.href), { cache: 'no-cache' });
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : data.profiles || [];
+    return list.some((p) => p && p.id === id);
+  } catch { return false; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Render loop
+ * ------------------------------------------------------------------ */
+let current = null;
+let saveTimer;
+
+function update() {
+  current = collect();
+  const { errors, warnings } = validate(current);
+
+  $$('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+  $$('.group-invalid').forEach((el) => el.classList.remove('group-invalid'));
+  for (const e of errors) {
+    const el = typeof e.el === 'string' ? $(e.el) : e.el;
+    if (!el) continue;
+    if (el.matches('input, select, textarea')) el.setAttribute('aria-invalid', 'true');
+    else el.classList.add('group-invalid');
+  }
+  $('#profileForm').classList.toggle('show-errors', state.showErrors);
+
+  const done = Math.max(0, REQUIRED_STEPS - errors.length);
+  const pct = errors.length ? Math.min(95, Math.round((done / REQUIRED_STEPS) * 100)) : 100;
+  $('#progressBar').style.width = pct + '%';
+  $('#progressPct').textContent = pct + '%';
+  $('#progressLabel').textContent = errors.length ? `${errors.length} item${errors.length === 1 ? '' : 's'} left` : 'Ready to submit';
+  $('#progressBar').classList.toggle('bg-emerald-500', !errors.length);
+
+  $('#issues').innerHTML = [
+    ...errors.map((e, i) => `<li><button type="button" data-issue="e${i}" class="flex w-full gap-2 rounded-md px-1 py-0.5 text-left hover:bg-slate-100 dark:hover:bg-slate-800"><span class="text-rose-500" aria-hidden="true">●</span>${esc(e.msg)}</button></li>`),
+    ...warnings.map((w, i) => `<li><button type="button" data-issue="w${i}" class="flex w-full gap-2 rounded-md px-1 py-0.5 text-left text-amber-700 hover:bg-slate-100 dark:text-amber-400 dark:hover:bg-slate-800"><span aria-hidden="true">▲</span>${esc(w.msg)}</button></li>`)
+  ].join('');
+  update.issues = { errors, warnings };
+
+  $$('[data-count]').forEach((el) => { el.textContent = val(el.dataset.count).length; });
+  const v = state.keptVouches.length;
+  $('#vouchKeep').classList.toggle('hidden', !v);
+  $('#vouchKeep').textContent = `${v} existing vouch${v === 1 ? '' : 'es'} from your imported profile will be kept as they are.`;
+  $('#jsonPreview').textContent = JSON.stringify(current, null, 2);
+  renderDestination(current);
+
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ profile: current, regionTouched: state.regionTouched })); } catch {}
+  }, 400);
+}
+
+function focusIssue(key) {
+  const { errors, warnings } = update.issues || {};
+  const item = key[0] === 'e' ? errors?.[+key.slice(1)] : warnings?.[+key.slice(1)];
+  if (!item) return;
+  const el = typeof item.el === 'string' ? $(item.el) : item.el;
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const focusable = el.matches('input, select, textarea') ? el : el.querySelector('input, select, textarea');
+  focusable?.focus({ preventScroll: true });
+}
+
+/* ------------------------------------------------------------------ *
+ * Submit / export
+ * ------------------------------------------------------------------ */
+const profileJson = () => JSON.stringify(current, null, 2) + '\n';
+
+async function copyJson(silent) {
+  try { await navigator.clipboard.writeText(profileJson()); if (!silent) toast('Profile JSON copied'); return true; }
+  catch { if (!silent) toast('Your browser blocked the clipboard. Use Download instead.'); return false; }
+}
+
+function downloadJson() {
+  const id = current.id || 'profile';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([profileJson()], { type: 'application/json' }));
+  a.download = `${id}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function showNext(html) {
+  const el = $('#nextSteps');
+  el.innerHTML = html;
+  el.classList.remove('hidden');
+}
+
+async function submit() {
+  state.showErrors = true;
+  update();
+  const { errors } = update.issues;
+  if (errors.length) {
+    toast(`${errors.length} item${errors.length === 1 ? '' : 's'} still need attention`);
+    focusIssue('e0');
+    return;
+  }
+  const { hub } = destination(current.region);
+  if (!hub) { toast('No hub is accepting profiles right now. Download your file instead.'); return; }
+
+  // Open the tab synchronously so pop-up blockers allow it, then point it at GitHub.
+  const win = window.open('about:blank', '_blank');
+  const { repository, branch = 'main', path } = hub.submit;
+  const file = `${current.id}.json`;
+  const base = `https://github.com/${repository}`;
+  const json = profileJson();
+  let url, html;
+
+  if (await profileExists(hub, current.id)) {
+    url = `${base}/edit/${branch}/${path}/${encodeURIComponent(file)}`;
+    const copied = await copyJson(true);
+    html = `<p class="font-semibold">Update your existing profile</p>
+      <ol class="mt-2 list-decimal space-y-1 pl-5">
+        <li>${copied ? 'Your updated profile is copied to the clipboard.' : 'Click <strong>Copy JSON</strong> above.'}</li>
+        <li>In the GitHub editor, select all the text and paste over it.</li>
+        <li>Click <strong>Commit changes… → Propose changes</strong>, then <strong>Create pull request</strong>.</li>
+      </ol>`;
+  } else {
+    url = `${base}/new/${branch}/${path}?filename=${encodeURIComponent(file)}&value=${encodeURIComponent(json)}`;
+    if (url.length > MAX_PREFILL_URL) {
+      url = `${base}/new/${branch}/${path}?filename=${encodeURIComponent(file)}`;
+      const copied = await copyJson(true);
+      html = `<p class="font-semibold">Almost there</p>
+        <ol class="mt-2 list-decimal space-y-1 pl-5">
+          <li>Your profile is too long to pass to GitHub directly, so ${copied ? 'it has been copied to your clipboard' : 'click <strong>Copy JSON</strong> above'}.</li>
+          <li>Paste it into the empty GitHub editor.</li>
+          <li>Click <strong>Commit changes… → Propose changes</strong>, then <strong>Create pull request</strong>.</li>
+        </ol>`;
+    } else {
+      html = `<p class="font-semibold">GitHub is open with your file ready</p>
+        <ol class="mt-2 list-decimal space-y-1 pl-5">
+          <li>Sign in to GitHub as <strong>@${esc(current.github)}</strong> if asked.</li>
+          <li>Click <strong>Commit changes…</strong>, then <strong>Propose changes</strong>. GitHub makes a copy (a fork) for you automatically.</li>
+          <li>Click <strong>Create pull request</strong>. Automated checks run, then a maintainer merges it.</li>
+        </ol>`;
+    }
+  }
+  html += `<p class="mt-3">Tab didn't open? <a class="font-medium text-brand-700 underline dark:text-brand-400" href="${esc(url)}" target="_blank" rel="noopener">Open GitHub</a></p>`;
+  showNext(html);
+  if (win) { win.opener = null; win.location.href = url; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Events & init
+ * ------------------------------------------------------------------ */
+function regionForCountry(c) {
+  for (const [region, list] of Object.entries(COUNTRY_REGION)) if (list.split(' ').includes(c)) return region;
+  return c ? 'europe' : '';
+}
+
+function bind() {
+  const form = $('#profileForm');
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.addEventListener('submit', (e) => e.preventDefault());
+
+  $('#region').addEventListener('change', () => { state.regionTouched = true; });
+  $('#country').addEventListener('change', (e) => {
+    if (!state.regionTouched) { $('#region').value = regionForCountry(e.target.value); update(); }
+  });
+
+  form.addEventListener('click', (e) => {
+    const add = e.target.closest('[data-add]');
+    if (add) {
+      ({ impact: addImpact, pow: addPow, language: addLanguage })[add.dataset.add]();
+      if (add.dataset.add !== 'impact') $$(`#${add.dataset.add === 'pow' ? 'pows' : 'languages'} .row`).at(-1)?.querySelector('input')?.focus();
+      update();
+      return;
+    }
+    const rm = e.target.closest('[data-remove]');
+    if (rm) {
+      const row = rm.closest('.row');
+      if (row.parentElement.id === 'impacts' && $$('#impacts .row').length === 1) { toast('At least one impact entry is required'); return; }
+      row.remove();
+      update();
+      return;
+    }
+    const sk = e.target.closest('[data-skill]');
+    if (sk) { state.skills = state.skills.filter((s) => s !== sk.dataset.skill); renderSkills(); update(); }
+  });
+
+  const skillInput = $('#skillInput');
+  $('#skillsBox').addEventListener('click', (e) => { if (e.target.id === 'skillsBox') skillInput.focus(); });
+  skillInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ',' || e.key === 'Tab') {
+      if (!skillInput.value.trim()) return;
+      e.preventDefault();
+      addSkills(skillInput.value); skillInput.value = ''; update();
+    } else if (e.key === 'Backspace' && !skillInput.value && state.skills.length) {
+      state.skills.pop(); renderSkills(); update();
+    }
+  });
+  skillInput.addEventListener('blur', () => { if (skillInput.value.trim()) { addSkills(skillInput.value); skillInput.value = ''; update(); } });
+  skillInput.addEventListener('paste', (e) => {
+    const text = e.clipboardData?.getData('text') || '';
+    if (/[,\n]/.test(text)) { e.preventDefault(); addSkills(text.replace(/\n/g, ',')); update(); }
+  });
+
+  $('#issues').addEventListener('click', (e) => { const b = e.target.closest('[data-issue]'); if (b) focusIssue(b.dataset.issue); });
+  $('#submitBtn').addEventListener('click', submit);
+  $('#copyBtn').addEventListener('click', () => copyJson(false));
+  $('#downloadBtn').addEventListener('click', downloadJson);
+
+  $('#importFile').addEventListener('change', async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    try {
+      const p = JSON.parse(await f.text());
+      if (!p || typeof p !== 'object' || Array.isArray(p)) throw new Error();
+      fill(p); update();
+      toast('Profile imported');
+    } catch { toast('That file isn’t a valid profile JSON'); }
+    e.target.value = '';
+  });
+
+  $('#clearDraft').addEventListener('click', () => {
+    if (!confirmClear()) return;
+    try { localStorage.removeItem(DRAFT_KEY); } catch {}
+    state.regionTouched = false; state.showErrors = false;
+    $('#profileForm').reset();
+    fill({ timezone: $('#timezone').value });
+    $('#nextSteps').classList.add('hidden');
+    update();
+    toast('Form cleared');
+  });
+
+  $('#themeToggle').addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    try { localStorage.setItem('trou-theme', dark ? 'dark' : 'light'); } catch {}
+  });
+}
+
+// Two-click confirmation instead of a blocking dialog.
+function confirmClear() {
+  const btn = $('#clearDraft');
+  if (btn.dataset.armed) { delete btn.dataset.armed; btn.textContent = 'Start over'; return true; }
+  btn.dataset.armed = '1';
+  btn.textContent = 'Click again to clear';
+  setTimeout(() => { delete btn.dataset.armed; btn.textContent = 'Start over'; }, 3000);
+  return false;
+}
+
+function init() {
+  buildSelects();
+  bind();
+  let draft = null;
+  try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch {}
+  if (draft?.profile) {
+    fill(draft.profile);
+    state.regionTouched = !!draft.regionTouched;
+  } else {
+    addImpact();
+  }
+  update();
+  loadHubs();
+}
+
+init();
+</script>
+</body>
+</html>

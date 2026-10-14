@@ -10,8 +10,16 @@
       "description": "Senior engineers, architects and technical leaders based in the United Kingdom and Ireland.",
       "repository": "https://github.com/rest-of-us/hub-uk",
       "profiles_url": "https://rest-of-us.github.io/hub-uk/profiles.json",
-      "timezones": ["UTC", "UTC+1"],
-      "status": "active"
+      "timezones": [
+        "UTC",
+        "UTC+1"
+      ],
+      "status": "active",
+      "submit": {
+        "repository": "rest-of-us/hub-uk",
+        "branch": "main",
+        "path": "profiles"
+      }
     },
     {
       "id": "canada",
@@ -20,8 +28,20 @@
       "description": "Senior tech talent across Canada, from Vancouver to Halifax.",
       "repository": "https://github.com/rest-of-us/hub-canada",
       "profiles_url": "https://rest-of-us.github.io/hub-canada/profiles.json",
-      "timezones": ["UTC-8", "UTC-7", "UTC-6", "UTC-5", "UTC-4", "UTC-3:30"],
-      "status": "active"
+      "timezones": [
+        "UTC-8",
+        "UTC-7",
+        "UTC-6",
+        "UTC-5",
+        "UTC-4",
+        "UTC-3:30"
+      ],
+      "status": "active",
+      "submit": {
+        "repository": "rest-of-us/hub-canada",
+        "branch": "main",
+        "path": "profiles"
+      }
     },
     {
       "id": "latam",
@@ -30,8 +50,18 @@
       "description": "Senior engineers across Mexico, Central and South America, with strong overlap with North American hours.",
       "repository": "https://github.com/rest-of-us/hub-latam",
       "profiles_url": "https://rest-of-us.github.io/hub-latam/profiles.json",
-      "timezones": ["UTC-6", "UTC-5", "UTC-4", "UTC-3"],
-      "status": "active"
+      "timezones": [
+        "UTC-6",
+        "UTC-5",
+        "UTC-4",
+        "UTC-3"
+      ],
+      "status": "active",
+      "submit": {
+        "repository": "rest-of-us/hub-latam",
+        "branch": "main",
+        "path": "profiles"
+      }
     },
     {
       "id": "apac",
@@ -40,8 +70,36 @@
       "description": "Senior tech talent across India, Southeast Asia, Australia and New Zealand.",
       "repository": "https://github.com/rest-of-us/hub-apac",
       "profiles_url": "https://rest-of-us.github.io/hub-apac/profiles.json",
-      "timezones": ["UTC+5:30", "UTC+7", "UTC+8", "UTC+9", "UTC+10", "UTC+12"],
-      "status": "active"
+      "timezones": [
+        "UTC+5:30",
+        "UTC+7",
+        "UTC+8",
+        "UTC+9",
+        "UTC+10",
+        "UTC+12"
+      ],
+      "status": "active",
+      "submit": {
+        "repository": "rest-of-us/hub-apac",
+        "branch": "main",
+        "path": "profiles"
+      }
+    },
+    {
+      "id": "community",
+      "name": "Community (all regions)",
+      "region": "global",
+      "description": "Profiles from regions whose hub isn't open yet. Each one moves to its regional hub when that hub launches.",
+      "repository": "https://github.com/jsrothwell/job-circles",
+      "profiles_url": "profiles/community.json",
+      "timezones": [],
+      "status": "active",
+      "always_open": true,
+      "submit": {
+        "repository": "jsrothwell/job-circles",
+        "branch": "main",
+        "path": "profiles/community"
+      }
     },
     {
       "id": "demo",

@@ -1,0 +1,30 @@
+name: Validate profiles
+
+on:
+  pull_request:
+    paths:
+      - 'profiles/community/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install validator
+        run: npm install --no-save --no-package-lock ajv@8 ajv-formats@3
+
+      - name: Check profile changes
+        run: node scripts/validate-profiles.mjs profiles/community
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
