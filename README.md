@@ -2,7 +2,7 @@
 
 **Connecting senior global tech talent directly with recruiters — bypassing ATS filters and regional bias.**
 
-🌍 **Live site:** https://the-rest-of-us.github.io
+🌍 **Live site:** https://rest-of-us.github.io/job-circles
 
 The Rest of US is an open-source, decentralized directory of senior tech talent based outside the United States. Experienced engineers, architects and technical leaders in the UK, Canada, Latin America, Asia-Pacific and beyond are routinely screened out by keyword-matching ATS tools, location checks and age proxies such as graduation years, before a human reads their CV.
 
@@ -20,7 +20,7 @@ This project takes a different approach:
 
 ```
                        ┌────────────────────────────────────────────┐
-                       │  the-rest-of-us.github.io  (this repo)     │
+                       │  rest-of-us/job-circles  (this repo)       │
                        │  index.html ── reads ──▶ hubs.json         │
                        │      │                                     │
                        │      └─ fetches every hub's profiles.json, │
@@ -47,13 +47,13 @@ This project takes a different approach:
 
 You publish your profile by opening a pull request against the hub for your region. You never need to touch this repository.
 
-1. **Find your hub** in [`hubs.json`](hubs.json) or under [Hubs & feeds](https://the-rest-of-us.github.io/#hubs) on the site. If your region has no hub yet, see [Launching a regional hub](#launching-a-regional-hub).
+1. **Find your hub** in [`hubs.json`](hubs.json) or under [Hubs & feeds](https://rest-of-us.github.io/job-circles/#hubs) on the site. If your region has no hub yet, see [Launching a regional hub](#launching-a-regional-hub).
 2. **Fork the hub repository** and create `profiles/<your-github-handle>.json`. Start from one of the entries in [`profiles/demo.json`](profiles/demo.json).
 3. **Write about impact.** Fill in `major_impact` with the systems you designed and what changed because of them: scale, latency, cost, reliability, team growth. Leave out dates; the schema rejects them.
 4. **Validate locally** (optional; CI does this too):
    ```bash
    npx -p ajv-cli -p ajv-formats ajv validate --spec=draft2020 -c ajv-formats \
-     -s https://the-rest-of-us.github.io/profiles/schema.json \
+     -s https://rest-of-us.github.io/job-circles/profiles/schema.json \
      -d profiles/<your-github-handle>.json
    ```
 5. **Open a pull request** from your own GitHub account. Maintainers check that the PR author matches the `github` field in your profile, then merge it. Your profile shows up on the site the next time the hub's feed is rebuilt, usually within a few minutes.
@@ -87,7 +87,7 @@ Valid relationships are `manager`, `direct_report`, `peer`, `tech_lead`, `client
 
 Anyone can start a hub for a region that doesn't have one, or a region-specific community (a country, or a city).
 
-1. **Create the repo from the template.** Go to [`the-rest-of-us/hub-template`](https://github.com/the-rest-of-us/hub-template) and click **Use this template**. Name it `hub-<region>` (for example `hub-nordics`). Ideally create it inside the `the-rest-of-us` organization; ask in an issue to be added. A hub in your own account works too.
+1. **Create the repo from the template.** Go to [`rest-of-us/hub-template`](https://github.com/rest-of-us/hub-template) and click **Use this template**. Name it `hub-<region>` (for example `hub-nordics`). Hubs can live under the `rest-of-us` account (ask in an issue) or in your own account or organization.
 2. **Enable GitHub Pages:** go to *Settings → Pages → Build and deployment → Source: GitHub Actions*.
 3. **Check the workflows.** The template ships two:
    - `validate.yml` runs on every PR. It validates each `profiles/*.json` against the central schema, checks that the file name matches `id`, and checks that the PR author matches the profile's `github` handle (or the `vouched_by_github` of any added vouch).
@@ -100,8 +100,8 @@ Anyone can start a hub for a region that doesn't have one, or a region-specific 
      "name": "Nordics",
      "region": "europe",
      "description": "Senior tech talent in Denmark, Finland, Iceland, Norway and Sweden.",
-     "repository": "https://github.com/the-rest-of-us/hub-nordics",
-     "profiles_url": "https://the-rest-of-us.github.io/hub-nordics/profiles.json",
+     "repository": "https://github.com/rest-of-us/hub-nordics",
+     "profiles_url": "https://rest-of-us.github.io/hub-nordics/profiles.json",
      "timezones": ["UTC+1", "UTC+2"],
      "status": "active"
    }
@@ -125,7 +125,7 @@ Hub `status` is one of `active`, `demo` (results labelled as samples) or `disabl
 
 ### Use the website
 
-Go to **https://the-rest-of-us.github.io** and:
+Go to **https://rest-of-us.github.io/job-circles** and:
 
 - search across skills, systems, roles and locations (fuzzy matching, so `kafka` finds `event streaming with Kafka`);
 - filter by **skill tags**, **timezone range** (with Americas / EMEA / APAC overlap presets), **work preference** (B2B contract, full-time via EOR, …), **seniority** and **peer-vouched** status;
@@ -139,10 +139,10 @@ Every hub is plain JSON over HTTPS. No API key, no rate-limited API.
 
 ```bash
 # List all hub feeds
-curl -s https://the-rest-of-us.github.io/hubs.json | jq -r '.hubs[].profiles_url'
+curl -s https://rest-of-us.github.io/job-circles/hubs.json | jq -r '.hubs[].profiles_url'
 
 # Staff+ engineers in LATAM open to B2B contracts who know Kubernetes
-curl -s https://the-rest-of-us.github.io/hub-latam/profiles.json | jq '
+curl -s https://rest-of-us.github.io/hub-latam/profiles.json | jq '
   .[] | select(
     (.seniority | IN("staff","principal","distinguished")) and
     (.work_preferences | index("contract_b2b")) and
@@ -152,7 +152,7 @@ curl -s https://the-rest-of-us.github.io/hub-latam/profiles.json | jq '
 
 ```js
 // Pull every profile from every hub (Node 18+ or a browser)
-const base = 'https://the-rest-of-us.github.io/';
+const base = 'https://rest-of-us.github.io/job-circles/';
 const { hubs } = await (await fetch(base + 'hubs.json')).json();
 const results = await Promise.allSettled(
   hubs.filter(h => h.status === 'active')
@@ -170,8 +170,8 @@ Please be a good citizen: contact people about roles that match their stated pre
 The site uses `fetch()`, so open it through a local web server instead of `file://`:
 
 ```bash
-git clone https://github.com/the-rest-of-us/the-rest-of-us.github.io.git
-cd the-rest-of-us.github.io
+git clone https://github.com/rest-of-us/job-circles.git
+cd job-circles
 python3 -m http.server 8000
 # open http://localhost:8000
 ```

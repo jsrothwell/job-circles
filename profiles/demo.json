@@ -39,7 +39,7 @@
       { "title": "Talk: Exactly-once is a lie, idempotency is not", "url": "https://example.com/talks/idempotency", "type": "talk" }
     ],
     "vouches": [
-      { "vouched_by": "Tom Reyes", "vouched_by_github": "example-treyes", "relationship": "manager", "statement": "Amara owned the ledger redesign end to end. It is the most reliable system I have run.", "date": "2026-08-02", "verification_url": "https://github.com/the-rest-of-us/hub-uk/pull/1" },
+      { "vouched_by": "Tom Reyes", "vouched_by_github": "example-treyes", "relationship": "manager", "statement": "Amara owned the ledger redesign end to end. It is the most reliable system I have run.", "date": "2026-08-02", "verification_url": "https://github.com/rest-of-us/hub-uk/pull/1" },
       { "vouched_by": "Priya Shah", "vouched_by_github": "example-pshah", "relationship": "peer", "date": "2026-08-10" }
     ],
     "contact": { "email": "amara@example.com", "linkedin": "https://www.linkedin.com/in/example" },
@@ -154,7 +154,7 @@
       { "title": "Talk: Zero trust without the buzzwords", "url": "https://example.com/talks/zero-trust", "type": "talk" }
     ],
     "vouches": [
-      { "vouched_by": "Sam Okoye", "vouched_by_github": "example-sokoye", "relationship": "client", "statement": "Liam led our zero-trust programme and left us with a team that can run it.", "date": "2026-06-11", "verification_url": "https://github.com/the-rest-of-us/hub-canada/pull/4" },
+      { "vouched_by": "Sam Okoye", "vouched_by_github": "example-sokoye", "relationship": "client", "statement": "Liam led our zero-trust programme and left us with a team that can run it.", "date": "2026-06-11", "verification_url": "https://github.com/rest-of-us/hub-canada/pull/4" },
       { "vouched_by": "Elena Petrova", "vouched_by_github": "example-epetrova", "relationship": "open_source_collaborator", "date": "2026-07-01" },
       { "vouched_by": "Kenji Watanabe", "vouched_by_github": "example-kwatanabe", "relationship": "direct_report", "date": "2026-07-03" }
     ],
